@@ -668,6 +668,10 @@ def api_search():
     data = tmdb("/search/movie", query=q) if q else {"results": []}
     out  = [{"id": m["id"], "title": m["title"], "year": (m.get("release_date") or "")[:4], "rating": round(m.get("vote_average", 0), 1), "poster": poster(m.get("poster_path"), "w92")} for m in data.get("results", [])[:8]]
     return jsonify(out)
-
+    
+@app.route('/google5cf9d1583ad86428.html')
+def google_verify():
+    return 'google-site-verification: google5cf9d1583ad86428.html'
+    
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
