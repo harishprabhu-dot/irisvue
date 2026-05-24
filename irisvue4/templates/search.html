@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta name="description" content="Irisvue — Your cinematic view of the world. Discover films, camera specs, cast, crew and more.">
+    <meta name="keywords" content="film discovery, movie ratings, cinema, letterboxd alternative, irisvue, film platform">
+    <meta name="author" content="S.R. HarisH Prabhu">
+    <meta property="og:title" content="Irisvue — Your Cinematic View of the World">
+    <meta property="og:description" content="Discover films like never before. Camera specs, cast, crew, ratings and more.">
+    <meta property="og:url" content="https://irisvue.onrender.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Irisvue — Your Cinematic View">
+    <meta name="twitter:description" content="Discover films like never before.">
+    <meta name="robots" content="index, follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if query %}{{ query }} — {% endif %}Search — Irisvue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><div class="logo-mark"></div><span>IRISVUE</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Discover</a></li>
+      <li><a href="/search" class="active">Films</a></li>
+      <li><a href="#">Community</a></li>
+      <li><a href="#">Lists</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#" class="nav-pro">Pro</a>
+      <a href="#" class="btn-signin">Sign in</a>
+      <a href="#" class="btn-join">Join free</a>
+    </div>
+  </div>
+</nav>
+
+<main class="search-main">
+  <div class="search-header">
+    <div class="section-label">Search</div>
+    <div class="search-bar-lg">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search-input" value="{{ query }}" placeholder="Search films, directors, genres..." autofocus>
+    </div>
+    {% if query %}
+    <div class="search-result-count">
+      {% if results %}{{ results|length }} results for "{{ query }}"{% else %}No results for "{{ query }}"{% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  {% if results %}
+  <div class="film-grid search-grid">
+    {% for movie in results %}
+    <a href="/movie/{{ movie.id }}" class="film-card">
+      <div class="film-card-poster">
+        {% if movie.poster_path %}
+        <img src="{{ poster(movie.poster_path, 'w342') }}" alt="{{ movie.title }}" loading="lazy">
+        {% else %}
+        <div class="film-card-empty">{{ movie.title[0] }}</div>
+        {% endif %}
+        <div class="film-card-hover">
+          <div class="film-card-rating">{{ "%.1f"|format(movie.vote_average) }}</div>
+          <div class="film-card-cta">View Film</div>
+        </div>
+      </div>
+      <div class="film-card-info">
+        <div class="film-card-title">{{ movie.title }}</div>
+        <div class="film-card-year">{{ movie.release_date[:4] if movie.release_date else 'TBA' }}</div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% elif query %}
+  <div class="no-results">
+    <div class="no-results-title">No films found</div>
+    <div class="no-results-sub">Try a different search term or browse by genre</div>
+    <a href="/" class="btn-ghost-lg" style="display:inline-block;margin-top:2rem;">Back to Discover</a>
+  </div>
+  {% endif %}
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-logo"><div class="logo-mark sm"></div><span>IRISVUE</span></div>
+      <div class="footer-tagline">Your cinematic view of the world</div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>2026 Irisvue. This product uses the TMDB API but is not endorsed or certified by TMDB.</span>
+  </div>
+</footer>
+
+<script>
+  const inp = document.getElementById('search-input');
+  let timer;
+  inp.addEventListener('input', () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      const q = inp.value.trim();
+      if (q) window.location.href = `/search?q=${encodeURIComponent(q)}`;
+    }, 600);
+  });
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const q = inp.value.trim();
+      if (q) window.location.href = `/search?q=${encodeURIComponent(q)}`;
+    }
+  });
+</script>
+</body>
+</html>

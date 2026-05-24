@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta name="description" content="Irisvue — Your cinematic view of the world. Discover films, camera specs, cast, crew and more.">
+    <meta name="keywords" content="film discovery, movie ratings, cinema, letterboxd alternative, irisvue, film platform">
+    <meta name="author" content="S.R. HarisH Prabhu">
+    <meta property="og:title" content="Irisvue — Your Cinematic View of the World">
+    <meta property="og:description" content="Discover films like never before. Camera specs, cast, crew, ratings and more.">
+    <meta property="og:url" content="https://irisvue.onrender.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Irisvue — Your Cinematic View">
+    <meta name="twitter:description" content="Discover films like never before.">
+    <meta name="robots" content="index, follow"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — Irisvue</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+<style>
+.auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; background: var(--bg); }
+.auth-box { width: 100%; max-width: 420px; }
+.auth-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 3rem; text-decoration: none; }
+.auth-logo span { font-family: var(--font-ui); font-size: 0.875rem; font-weight: 800; letter-spacing: 0.14em; color: var(--text); }
+.auth-title { font-family: var(--font-display); font-size: 2.5rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+.auth-sub { color: var(--text-2); font-size: 0.9rem; margin-bottom: 2.5rem; }
+.auth-sub a { color: var(--accent); text-decoration: none; }
+.form-group { margin-bottom: 1.25rem; }
+.form-label { display: block; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); margin-bottom: 8px; font-weight: 500; }
+.form-input { width: 100%; background: var(--bg-3); border: 1px solid var(--border-2); color: var(--text); font-family: var(--font-ui); font-size: 0.9rem; padding: 12px 14px; border-radius: var(--radius); outline: none; transition: border-color 0.2s; }
+.form-input:focus { border-color: var(--accent); }
+.form-input::placeholder { color: var(--text-3); }
+.form-check { display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem; }
+.form-check input { width: 16px; height: 16px; accent-color: var(--accent); }
+.form-check label { font-size: 0.85rem; color: var(--text-2); }
+.auth-btn { width: 100%; padding: 13px; background: var(--text); border: none; color: var(--bg); font-family: var(--font-ui); font-size: 0.875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border-radius: var(--radius); cursor: pointer; transition: all 0.2s; margin-bottom: 1.5rem; }
+.auth-btn:hover { background: var(--accent-2); }
+.auth-divider { text-align: center; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); margin-bottom: 1.5rem; }
+.flash-msg { padding: 10px 14px; border-radius: var(--radius); margin-bottom: 1.25rem; font-size: 0.85rem; font-weight: 500; }
+.flash-error { background: rgba(220,50,50,0.12); border: 1px solid rgba(220,50,50,0.3); color: #ff6b6b; }
+.flash-success { background: rgba(50,200,100,0.12); border: 1px solid rgba(50,200,100,0.3); color: #51cf66; }
+</style>
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-box">
+    <a href="/" class="auth-logo">
+      <div class="logo-mark"></div>
+      <span>IRISVUE</span>
+    </a>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash-msg flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <h1 class="auth-title">Sign in.</h1>
+    <p class="auth-sub">New to Irisvue? <a href="/signup">Create a free account</a></p>
+
+    <form method="POST" action="/login">
+      <div class="form-group">
+        <label class="form-label">Email or Username</label>
+        <input type="text" name="identifier" class="form-input" placeholder="your@email.com" required autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-input" placeholder="Your password" required autocomplete="current-password">
+      </div>
+      <div class="form-check">
+        <input type="checkbox" name="remember" id="remember">
+        <label for="remember">Keep me signed in</label>
+      </div>
+      <button type="submit" class="auth-btn">Sign in to Irisvue</button>
+    </form>
+
+    <div class="auth-divider">— Your cinematic view of the world —</div>
+  </div>
+</div>
+</body>
+</html>

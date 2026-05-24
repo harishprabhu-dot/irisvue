@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta name="description" content="Irisvue — Your cinematic view of the world. Discover films, camera specs, cast, crew and more.">
+    <meta name="keywords" content="film discovery, movie ratings, cinema, letterboxd alternative, irisvue, film platform">
+    <meta name="author" content="S.R. HarisH Prabhu">
+    <meta property="og:title" content="Irisvue — Your Cinematic View of the World">
+    <meta property="og:description" content="Discover films like never before. Camera specs, cast, crew, ratings and more.">
+    <meta property="og:url" content="https://irisvue.onrender.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Irisvue — Your Cinematic View">
+    <meta name="twitter:description" content="Discover films like never before.">
+    <meta name="robots" content="index, follow"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ user.username }} — Irisvue</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+<style>
+.profile-main { padding-top: var(--nav-h); min-height: 100vh; }
+.profile-header { background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 3rem 2.5rem; }
+.profile-header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: flex-end; gap: 2rem; }
+.profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--bg-3); border: 2px solid var(--border-2); display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+.profile-info { flex: 1; }
+.profile-username { font-family: var(--font-display); font-size: 2.5rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4px; }
+.profile-meta { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-3); display: flex; gap: 1.5rem; }
+.profile-stats { display: flex; gap: 2rem; margin-top: 1rem; }
+.profile-stat-n { font-family: var(--font-mono); font-size: 1.5rem; font-weight: 500; color: var(--text); }
+.profile-stat-l { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-top: 2px; }
+.profile-tabs { max-width: 1200px; margin: 0 auto; padding: 0 2.5rem; display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+.profile-tab { padding: 1rem 1.5rem; font-family: var(--font-ui); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; color: var(--text-2); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; }
+.profile-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+.profile-content { max-width: 1200px; margin: 0 auto; padding: 2.5rem; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.diary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 1.2rem; }
+.diary-card { text-decoration: none; color: inherit; }
+.diary-poster { aspect-ratio: 2/3; border-radius: var(--radius-md); overflow: hidden; background: var(--bg-3); margin-bottom: 8px; position: relative; border: 1px solid var(--border); }
+.diary-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.diary-rating { position: absolute; bottom: 6px; right: 6px; background: rgba(8,8,8,0.8); font-family: var(--font-mono); font-size: 0.68rem; color: var(--accent); padding: 2px 6px; border-radius: 2px; }
+.diary-title { font-size: 0.8rem; font-weight: 600; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.diary-year { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); }
+.review-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.review-item { background: var(--bg); padding: 1.5rem; display: flex; gap: 1.25rem; }
+.review-poster { width: 44px; height: 62px; object-fit: cover; border-radius: var(--radius); flex-shrink: 0; }
+.review-info { flex: 1; }
+.review-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+.review-rating { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); margin-bottom: 8px; }
+.review-text { font-size: 0.875rem; color: var(--text-2); line-height: 1.7; }
+.review-date { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-3); margin-top: 8px; }
+.empty-state { text-align: center; padding: 4rem 2rem; }
+.empty-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+.empty-desc { color: var(--text-2); font-size: 0.9rem; margin-bottom: 1.5rem; }
+.logout-btn { background: none; border: 1px solid var(--border-2); color: var(--text-2); font-family: var(--font-ui); font-size: 0.78rem; font-weight: 600; padding: 7px 16px; border-radius: var(--radius); cursor: pointer; transition: all 0.2s; text-decoration: none; }
+.logout-btn:hover { border-color: var(--border-3); color: var(--text); }
+</style>
+</head>
+<body>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><div class="logo-mark"></div><span>IRISVUE</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Discover</a></li><li><a href="/search">Films</a></li>
+      <li><a href="/community">Community</a></li><li><a href="/battles">Battles</a></li>
+      <li><a href="/clubs">Clubs</a></li><li><a href="/dna">My DNA</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/profile" class="btn-signin" style="color:var(--text);">{{ user.username }}</a>
+      <a href="/logout" class="logout-btn">Sign out</a>
+    </div>
+  </div>
+</nav>
+
+<main class="profile-main">
+  <div class="profile-header">
+    <div class="profile-header-inner">
+      <div class="profile-avatar">{{ user.username[0].upper() }}</div>
+      <div class="profile-info">
+        <div class="profile-username">{{ user.username }}</div>
+        <div class="profile-meta">
+          <span>Joined {{ user.created_at.strftime('%B %Y') }}</span>
+          {% if user.location %}<span>{{ user.location }}</span>{% endif %}
+        </div>
+        <div class="profile-stats">
+          <div>
+            <div class="profile-stat-n">{{ diary|length }}</div>
+            <div class="profile-stat-l">Films logged</div>
+          </div>
+          <div>
+            <div class="profile-stat-n">{{ reviews|length }}</div>
+            <div class="profile-stat-l">Reviews</div>
+          </div>
+          <div>
+            <div class="profile-stat-n">{{ watchlist|length }}</div>
+            <div class="profile-stat-l">Watchlist</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-tabs">
+    <button class="profile-tab active" onclick="showTab('diary', this)">Diary</button>
+    <button class="profile-tab" onclick="showTab('reviews', this)">Reviews</button>
+    <button class="profile-tab" onclick="showTab('watchlist', this)">Watchlist</button>
+  </div>
+
+  <div class="profile-content">
+
+    <!-- DIARY -->
+    <div class="tab-panel active" id="tab-diary">
+      {% if diary %}
+      <div class="diary-grid">
+        {% for entry in diary %}
+        <a href="/movie/{{ entry.movie_id }}" class="diary-card">
+          <div class="diary-poster">
+            {% if entry.movie_poster %}
+            <img src="{{ entry.movie_poster }}" alt="{{ entry.movie_title }}" loading="lazy">
+            {% else %}
+            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:2rem;color:var(--text-3);">{{ entry.movie_title[0] }}</div>
+            {% endif %}
+            {% if entry.rating %}
+            <div class="diary-rating">{{ "%.1f"|format(entry.rating) }}</div>
+            {% endif %}
+          </div>
+          <div class="diary-title">{{ entry.movie_title }}</div>
+          <div class="diary-year">{{ entry.movie_year }}</div>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-title">No films logged yet.</div>
+        <div class="empty-desc">Start watching and logging films to build your diary.</div>
+        <a href="/search" class="btn-primary-lg">Find a film</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="tab-panel" id="tab-reviews">
+      {% if reviews %}
+      <div class="review-list">
+        {% for review in reviews %}
+        <div class="review-item">
+          {% if review.movie_poster %}
+          <img src="{{ review.movie_poster }}" alt="{{ review.movie_title }}" class="review-poster">
+          {% endif %}
+          <div class="review-info">
+            <div class="review-title"><a href="/movie/{{ review.movie_id }}" style="color:inherit;text-decoration:none;">{{ review.movie_title }}</a></div>
+            <div class="review-rating">
+              {% for i in range(review.rating|int) %}★{% endfor %} {{ "%.1f"|format(review.rating) }} · {{ review.watch_type|capitalize }} watch
+            </div>
+            {% if review.review_text %}
+            <div class="review-text">{{ review.review_text }}</div>
+            {% endif %}
+            <div class="review-date">{{ review.created_at.strftime('%B %d, %Y') }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-title">No reviews yet.</div>
+        <div class="empty-desc">Watch a film and share your thoughts.</div>
+        <a href="/search" class="btn-primary-lg">Find a film</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- WATCHLIST -->
+    <div class="tab-panel" id="tab-watchlist">
+      {% if watchlist %}
+      <div class="diary-grid">
+        {% for item in watchlist %}
+        <a href="/movie/{{ item.movie_id }}" class="diary-card">
+          <div class="diary-poster">
+            {% if item.movie_poster %}
+            <img src="{{ item.movie_poster }}" alt="{{ item.movie_title }}" loading="lazy">
+            {% else %}
+            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:2rem;color:var(--text-3);">{{ item.movie_title[0] }}</div>
+            {% endif %}
+          </div>
+          <div class="diary-title">{{ item.movie_title }}</div>
+          <div class="diary-year">{{ item.movie_year }}</div>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-title">Watchlist is empty.</div>
+        <div class="empty-desc">Save films you want to watch.</div>
+        <a href="/search" class="btn-primary-lg">Browse films</a>
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-logo"><div class="logo-mark sm"></div><span>IRISVUE</span></div>
+      <div class="footer-tagline">Your cinematic view of the world</div>
+    </div>
+  </div>
+  <div class="footer-bottom">2026 Irisvue.</div>
+</footer>
+
+<script src="/static/js/main.js"></script>
+<script>
+function showTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.profile-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
