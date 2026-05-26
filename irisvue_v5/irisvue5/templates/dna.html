@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <meta name="description" content="Irisvue — Your cinematic view of the world. Discover films, camera specs, cast, crew and more.">
+    <meta name="keywords" content="film discovery, movie ratings, cinema, letterboxd alternative, irisvue, film platform">
+    <meta name="author" content="S.R. HarisH Prabhu">
+    <meta property="og:title" content="Irisvue — Your Cinematic View of the World">
+    <meta property="og:description" content="Discover films like never before. Camera specs, cast, crew, ratings and more.">
+    <meta property="og:url" content="https://irisvue.onrender.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Irisvue — Your Cinematic View">
+    <meta name="twitter:description" content="Discover films like never before.">
+    <meta name="robots" content="index, follow"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cinema DNA — Irisvue</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+<style>
+.dna-main { padding-top: var(--nav-h); min-height: 100vh; }
+.dna-header { max-width: 800px; margin: 0 auto; padding: 4rem 2.5rem 3rem; }
+.dna-quiz { max-width: 800px; margin: 0 auto; padding: 0 2.5rem; }
+.dna-question { display: none; animation: fadeUp 0.4s ease forwards; }
+.dna-question.active { display: block; }
+.dna-q-num { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-3); margin-bottom: 1rem; letter-spacing: 0.1em; }
+.dna-q-text { font-family: var(--font-display); font-size: 2rem; font-weight: 700; line-height: 1.2; margin-bottom: 2.5rem; }
+.dna-options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.dna-option { border: 1px solid var(--border-2); border-radius: 4px; padding: 1.25rem 1.5rem; cursor: pointer; transition: all 0.2s; background: var(--bg-2); text-align: left; font-family: var(--font-ui); color: var(--text); }
+.dna-option:hover { border-color: var(--accent); background: rgba(191,168,130,0.06); }
+.dna-option.selected { border-color: var(--accent); background: rgba(191,168,130,0.1); }
+.dna-opt-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+.dna-opt-sub { font-size: 0.78rem; color: var(--text-2); }
+.dna-progress { height: 2px; background: var(--border-2); border-radius: 1px; margin-bottom: 3rem; }
+.dna-progress-bar { height: 100%; background: var(--accent); border-radius: 1px; transition: width 0.4s ease; }
+.dna-nav { display: flex; justify-content: space-between; margin-top: 2rem; padding-bottom: 4rem; }
+.dna-result { display: none; max-width: 800px; margin: 0 auto; padding: 0 2.5rem 6rem; }
+.dna-result.show { display: block; animation: fadeUp 0.6s ease forwards; }
+.dna-result-label { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent); letter-spacing: 0.2em; margin-bottom: 1rem; }
+.dna-result-type { font-family: var(--font-display); font-size: 4rem; font-weight: 700; font-style: italic; margin-bottom: 1.5rem; }
+.dna-result-desc { font-family: var(--font-display); font-size: 1.3rem; font-weight: 300; line-height: 1.8; color: var(--text-2); margin-bottom: 3rem; max-width: 600px; }
+.dna-recs { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-top: 2rem; }
+.dna-rec { border: 1px solid var(--border-2); border-radius: 4px; padding: 1.25rem; }
+.dna-rec-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-3); letter-spacing: 0.1em; margin-bottom: 6px; text-transform: uppercase; }
+.dna-rec-val { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+.dna-retake { margin-top: 3rem; }
+</style>
+</head>
+<body>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><div class="logo-mark"></div><span>IRISVUE</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Discover</a></li><li><a href="/search">Films</a></li>
+      <li><a href="/community">Community</a></li><li><a href="/battles">Battles</a></li>
+      <li><a href="/clubs">Clubs</a></li><li><a href="/dna" class="active">My DNA</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/watchlist" class="btn-signin">Watchlist</a>
+      <a href="#" class="btn-join">Join free</a>
+    </div>
+  </div>
+</nav>
+
+<main class="dna-main">
+  <div class="dna-header">
+    <div class="section-label">Cinema DNA</div>
+    <h1 class="section-title">Discover your<br><em>film identity.</em></h1>
+    <p style="color:var(--text-2);margin-top:1rem;font-size:0.95rem;">Answer 8 questions. We'll tell you exactly what kind of film lover you are.</p>
+  </div>
+
+  <div class="dna-quiz" id="dna-quiz">
+    <div class="dna-progress"><div class="dna-progress-bar" id="dna-bar" style="width:0%"></div></div>
+
+    <div class="dna-question active" data-q="0">
+      <div class="dna-q-num">01 / 08</div>
+      <div class="dna-q-text">When you sit down to watch a film, what matters most to you?</div>
+      <div class="dna-options">
+        <button class="dna-option" data-val="visual craft and technical mastery"><div class="dna-opt-title">Visual craft</div><div class="dna-opt-sub">Cinematography, direction, technical mastery</div></button>
+        <button class="dna-option" data-val="character emotion and drama"><div class="dna-opt-title">Character depth</div><div class="dna-opt-sub">Performance, emotion, human connection</div></button>
+        <button class="dna-option" data-val="thriller tension and plot twists"><div class="dna-opt-title">Story tension</div><div class="dna-opt-sub">Plot, twists, narrative suspense</div></button>
+        <button class="dna-option" data-val="slow atmospheric visual poetry"><div class="dna-opt-title">Pure atmosphere</div><div class="dna-opt-sub">Mood, tone, sensory experience</div></button>
+      </div>
+    </div>
+
+    <div class="dna-question" data-q="1">
+      <div class="dna-q-num">02 / 08</div>
+      <div class="dna-q-text">Which era of cinema do you find yourself returning to most?</div>
+      <div class="dna-options">
+        <button class="dna-option" data-val="classic old criterion kubrick history"><div class="dna-opt-title">Classic Hollywood & Classics</div><div class="dna-opt-sub">1930s — 1970s</div></button>
+        <button class="dna-option" data-val="godard rebel avant experimental"><div class="dna-opt-title">New Wave Era</div><div class="dna-opt-sub">1960s — 1980s</div></button>
+        <button class="dna-option" data-val="fincher drama thriller character"><div class="dna-opt-title">Modern Cinema</div><div class="dna-opt-sub">1990s — 2010s</div></button>
+        <button class="dna-option" data-val="sci-fi nolan villeneuve epic technical"><div class="dna-opt-title">Contemporary</div><div class="dna-opt-sub">2015 — Present</div></button>
+      </div>
+    </div>
+
+    <div class="dna-question" data-q="2">
+      <div class="dna-q-num">03 / 08</div>
+      <div class="dna-q-text">A film is three hours long with almost no dialogue. Your reaction?</div>
+      <div class="dna-options">
+        <button class="dna-option" data-val="slow atmospheric visual poetry malick"><div class="dna-opt-title">Excited</div><div class="dna-opt-sub">That's exactly the kind of cinema I love</div></button>
+        <button class="dna-option" data-val="classic old criterion history"><div class="dna-opt-title">Open to it</div><div class="dna-opt-sub">Depends on the filmmaker's reputation</div></button>
+        <button class="dna-option" data-val="character emotion drama intimate"><div class="dna-opt-title">Cautious</div><div class="dna-opt-sub">I need some narrative momentum</div></button>
+        <button class="dna-option" data-val="thriller tension fincher plot"><div class="dna-opt-title">Skeptical</div><div class="dna-opt-sub">I prefer films that move with purpose</div></button>
+      </div>
+    </div>
+
+    <div class="dna-question" data-q="3">
+      <div class="dna-q-num">04 / 08</div>
+      <div class="dna-q-text">Which director would you most like to have dinner with?</div>
+      <div class="dna-options">
+        <button class="dna-option" data-val="nolan villeneuve sci-fi technical epic"><div class="dna-opt-title">Christopher Nolan</div><div class="dna-opt-sub">Epic, cerebral, technically obsessive</div></button>
+        <button class="dna-option" data-val="fincher thriller tension crime zodiac"><div class="dna-opt-title">David Fincher</div><div class="dna-opt-sub">Precise, dark, relentlessly analytical</div></button>
+        <button class="dna-option" data-val="kubrick classic old history archivist"><div class="dna-opt-title">Stanley Kubrick</div><div class="dna-opt-sub">Perfectionist, philosophical, timeless</div></button>
+        <button class="dna-option" data-val="malick slow atmospheric visual poetry"><div class="dna-opt-title">Terrence Malick</div><div class="dna-opt-sub">Spiritual, poetic, beyond narrative</div></button>
+      </div>
+    </div>
+
+    <div class="dna-question" data-q="4">
+      <div class="dna-q-num">05 / 08</div>
+      <div class="dna-q-text">What ruins a film for you the most?</div>
+      <div class="dna-options">
+        <button class="dna-option" data-val="sci-fi technical nolan villeneuve"><div class="dna-opt-title">Poor technical execution</div><div class="dna-opt-sub">Bad cinematography, cheap effects</div></button>
+        <button class="dna-option" data-val="character emotion drama intimate"><div class="dna-opt-title">Underdeveloped characters</div><div class="dna-opt-sub">People you don't care about</div></button>
+        <button class="dna-option" data-val="thriller tension fincher twist"><div class="dna-opt-title">A predictable plot</div><div class="dna-opt-sub">No surprises, no tension</div></button>
+        <button class="dna-option" data-val="rebel experimental avant godard"><div class="dna-opt-title">Playing it safe</div><div class="dna-opt-sub">No formal ambition or risk-taking</div></button>
+      </div>
+    </div>
+
+    <div class="dna-question" data-q="5">
+      <div class="dna-q-num">06 / 08</div>
+      <div class="dna-q-text">Which film would you most recommend to a friend?</div>
+      <div class="dna-options">
+        <button class="dna-option" data-val="sci-fi epic technical nolan villeneuve"><div class="dna-opt-title">Interstellar</div><div class="dna-opt-sub">Science fiction, emotion, spectacle</div></button>
+        <button class="dna-option" data-val="thriller crime fincher tension"><div class="dna-opt-title">Parasite</div><div class="dna-opt-sub">Genre-defying, sharp, unforgettable</div></button>
+        <button class="dna-option" data-val="character emotion romance drama intimate"><div class="dna-opt-title">In the Mood for Love</div><div class="dna-opt-sub">Longing, beauty, restraint</div></button>
+        <button class="dna-option" data-val="classic history kubrick archivist old"><div class="dna-opt-title">2001: A Space Odyssey</div><div class="dna-opt-sub">Visionary, challenging, transcendent</div></button>
+      </div>
+    </div>
+
+    <div class="dna-question" data-q="6">
+      <div class="dna-q-num">07 / 08</div>
+      <div class="dna-q-text">What's your relationship with subtitles?</div>
+      <div class="dna-options">
+        <button class="dna-option" data-val="classic history kubrick criterion archivist"><div class="dna-opt-title">Prefer them</div><div class="dna-opt-sub">I actively seek out foreign language cinema</div></button>
+        <button class="dna-option" data-val="character emotion drama intimate"><div class="dna-opt-title">Fine with them</div><div class="dna-opt-sub">Language doesn't matter, story does</div></button>
+        <button class="dna-option" data-val="sci-fi technical nolan epic"><div class="dna-opt-title">Neutral</div><div class="dna-opt-sub">I watch both equally</div></button>
+        <button class="dna-option" data-val="thriller fincher tension crime"><div class="dna-opt-title">Sometimes challenging</div><div class="dna-opt-sub">I prefer to focus on the visuals</div></button>
+      </div>
+    </div>
+
+    <div class="dna-question" data-q="7">
+      <div class="dna-q-num">08 / 08</div>
+      <div class="dna-q-text">After watching a great film, you immediately want to...</div>
+      <div class="dna-options">
+        <button class="dna-option" data-val="sci-fi technical nolan villeneuve"><div class="dna-opt-title">Research how it was made</div><div class="dna-opt-sub">Cameras, techniques, production details</div></button>
+        <button class="dna-option" data-val="character emotion drama intimate"><div class="dna-opt-title">Talk about the characters</div><div class="dna-opt-sub">Discuss motivations and relationships</div></button>
+        <button class="dna-option" data-val="thriller fincher tension twist"><div class="dna-opt-title">Discuss the ending</div><div class="dna-opt-sub">Unpack the plot and revelations</div></button>
+        <button class="dna-option" data-val="slow atmospheric visual poetry malick rebel"><div class="dna-opt-title">Sit in silence</div><div class="dna-opt-sub">Let the experience wash over you</div></button>
+      </div>
+    </div>
+
+    <div class="dna-nav">
+      <button class="btn-ghost-lg" id="dna-back" style="display:none;padding:10px 24px;font-size:0.8rem;">Back</button>
+      <button class="btn-primary-lg" id="dna-next" style="padding:12px 32px;font-size:0.875rem;">Next</button>
+    </div>
+  </div>
+
+  <div class="dna-result" id="dna-result">
+    <div class="dna-result-label">Your Cinema DNA</div>
+    <div class="dna-result-type" id="result-type"></div>
+    <div class="dna-result-desc" id="result-desc"></div>
+    <div class="dna-recs">
+      <div class="dna-rec"><div class="dna-rec-label">Directors for you</div><div class="dna-rec-val" id="result-directors"></div></div>
+      <div class="dna-rec"><div class="dna-rec-label">Films to watch</div><div class="dna-rec-val" id="result-films"></div></div>
+      <div class="dna-rec"><div class="dna-rec-label">Your identity</div><div class="dna-rec-val" id="result-identity"></div></div>
+    </div>
+    <div class="dna-retake">
+      <button class="btn-ghost-lg" onclick="retake()" style="padding:12px 32px;">Retake the quiz</button>
+    </div>
+  </div>
+</main>
+
+<script src="/static/js/main.js"></script>
+<script>
+const questions = document.querySelectorAll('.dna-question');
+const bar = document.getElementById('dna-bar');
+const backBtn = document.getElementById('dna-back');
+const nextBtn = document.getElementById('dna-next');
+let current = 0;
+const answers = [];
+let selected = null;
+
+function update() {
+  questions.forEach((q,i) => q.classList.toggle('active', i === current));
+  bar.style.width = `${((current+1)/questions.length)*100}%`;
+  backBtn.style.display = current > 0 ? 'block' : 'none';
+  nextBtn.textContent = current === questions.length-1 ? 'See my DNA' : 'Next';
+  selected = null;
+  document.querySelectorAll('.dna-option').forEach(o => o.classList.remove('selected'));
+}
+
+document.querySelectorAll('.dna-option').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll(`[data-q="${current}"] .dna-option`).forEach(o => o.classList.remove('selected'));
+    this.classList.add('selected');
+    selected = this.dataset.val;
+  });
+});
+
+nextBtn.addEventListener('click', async () => {
+  if (selected) answers[current] = selected;
+  if (current < questions.length - 1) { current++; update(); }
+  else {
+    const res = await fetch('/api/dna/result', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({answers}) });
+    const data = await res.json();
+    document.getElementById('dna-quiz').style.display = 'none';
+    const result = document.getElementById('dna-result');
+    result.classList.add('show');
+    document.getElementById('result-type').textContent = data.title;
+    document.getElementById('result-desc').textContent = data.desc;
+    document.getElementById('result-directors').textContent = data.directors.join(', ');
+    document.getElementById('result-films').textContent = data.films.join(', ');
+    document.getElementById('result-identity').textContent = data.title;
+    localStorage.setItem('irisvue_dna', JSON.stringify(data));
+  }
+});
+
+backBtn.addEventListener('click', () => { if (current > 0) { current--; update(); } });
+
+function retake() {
+  current = 0; answers.length = 0;
+  document.getElementById('dna-result').classList.remove('show');
+  document.getElementById('dna-quiz').style.display = 'block';
+  update();
+}
+
+// Show saved result if exists
+const saved = localStorage.getItem('irisvue_dna');
+if (saved) {
+  const data = JSON.parse(saved);
+  const p = document.createElement('div');
+  p.style.cssText = 'max-width:800px;margin:0 auto;padding:0 2.5rem 2rem;';
+  p.innerHTML = `<div style="border:1px solid var(--border-2);border-radius:4px;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;">
+    <div><span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--text-3);">Saved result — </span><span style="font-size:0.9rem;font-weight:600;">${data.title}</span></div>
+    <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-family:var(--font-ui);font-size:0.75rem;">Clear</button>
+  </div>`;
+  document.querySelector('.dna-header').after(p);
+}
+</script>
+</body>
+</html>

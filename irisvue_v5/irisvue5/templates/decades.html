@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+<title>{% if decade %}{{ decade }}s Films{% else %}Browse by Decade{% endif %} — Irisvue</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+<style>
+.decades-main { padding-top: var(--nav-h); min-height: 100vh; }
+.decades-header { max-width: 1440px; margin: 0 auto; padding: 4rem 2.5rem 3rem; }
+.decades-grid { max-width: 1440px; margin: 0 auto; padding: 0 2.5rem 3rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 3rem; }
+.decade-card { background: var(--bg); padding: 2rem 1.5rem; text-decoration: none; color: inherit; display: block; transition: background 0.2s; }
+.decade-card:hover, .decade-card.active { background: var(--bg-3); }
+.decade-card.active .decade-num { color: var(--accent); }
+.decade-num { font-family: var(--font-display); font-size: 2.5rem; font-weight: 700; margin-bottom: 4px; }
+.decade-label { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; }
+.decade-desc { font-size: 0.78rem; color: var(--text-2); margin-top: 8px; line-height: 1.5; }
+.films-section { max-width: 1440px; margin: 0 auto; padding: 0 2.5rem 6rem; }
+</style>
+</head>
+<body>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><div class="logo-mark"></div><span>IRISVUE</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Discover</a></li><li><a href="/search">Films</a></li>
+      <li><a href="/directors">Directors</a></li>
+      <li><a href="/decades" class="active">Decades</a></li>
+      <li><a href="/tamil">Tamil</a></li>
+      <li><a href="/boxoffice">Box Office</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/watchlist" class="btn-signin">Watchlist</a>
+      <a href="#" class="btn-join">Join free</a>
+    </div>
+  </div>
+</nav>
+
+<main class="decades-main">
+  <div class="decades-header">
+    <div class="section-label">Time Machine</div>
+    <h1 class="section-title">Browse by <em>Decade</em></h1>
+    <p style="color:var(--text-2);margin-top:1rem;font-size:0.95rem;">Every era of cinema has its own language. Pick your decade.</p>
+  </div>
+
+  <div class="decades-grid">
+    {% set decade_data = [
+      (1920, "The Silent Era", "Chaplin, Keaton, Lang"),
+      (1930, "Golden Hollywood", "Hitchcock, Ford, Capra"),
+      (1940, "Wartime Cinema", "Noir, Casablanca, Citizen Kane"),
+      (1950, "The Studio System", "Kurosawa, Bergman, Wilder"),
+      (1960, "New Waves", "Godard, Fellini, Kubrick"),
+      (1970, "New Hollywood", "Coppola, Scorsese, Spielberg"),
+      (1980, "Blockbuster Era", "Lucas, Cameron, Scott"),
+      (1990, "Independent Wave", "Tarantino, Fincher, PTA"),
+      (2000, "Digital Revolution", "Nolan, Villeneuve, PT Anderson"),
+      (2010, "Streaming Age", "Iñárritu, Lanthimos, Peele"),
+      (2020, "New Cinema", "Nolan, Villeneuve, Aster"),
+    ] %}
+    {% for d, label, names in decade_data %}
+    <a href="/decades/{{ d }}" class="decade-card {% if decade == d %}active{% endif %}">
+      <div class="decade-num">{{ d }}s</div>
+      <div class="decade-label">{{ label }}</div>
+      <div class="decade-desc">{{ names }}</div>
+    </a>
+    {% endfor %}
+  </div>
+
+  {% if films %}
+  <div class="films-section">
+    <div class="section-label">{{ decade }}s</div>
+    <h2 class="section-title" style="margin-bottom:2.5rem;">Best of the <em>{{ decade }}s</em></h2>
+    <div class="film-grid">
+      {% for film in films %}
+      <a href="/movie/{{ film.id }}" class="film-card">
+        <div class="film-card-poster">
+          {% if film.poster_path %}
+          <img src="{{ poster(film.poster_path, 'w342') }}" alt="{{ film.title }}" loading="lazy">
+          {% else %}
+          <div class="film-card-empty">{{ film.title[0] }}</div>
+          {% endif %}
+          <div class="film-card-hover">
+            <div class="film-card-rating">{{ "%.1f"|format(film.vote_average) }}</div>
+            <div class="film-card-cta">View Film</div>
+          </div>
+        </div>
+        <div class="film-card-info">
+          <div class="film-card-title">{{ film.title }}</div>
+          <div class="film-card-year">{{ film.release_date[:4] if film.release_date else '' }}</div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-logo"><div class="logo-mark sm"></div><span>IRISVUE</span></div>
+      <div class="footer-tagline">Your cinematic view of the world</div>
+    </div>
+  </div>
+  <div class="footer-bottom">2026 Irisvue · Built by {{ owner.name }}</div>
+</footer>
+<script src="/static/js/main.js"></script>
+</body>
+</html>

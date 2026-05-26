@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+<title>{{ director.name }} — Irisvue</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+<style>
+.dir-main { padding-top: var(--nav-h); min-height: 100vh; }
+.dir-hero { background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 4rem 2.5rem 3rem; max-width: 1440px; margin: 0 auto; }
+.dir-name { font-family: var(--font-display); font-size: clamp(3rem,6vw,5rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+.dir-meta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-2); display: flex; gap: 1.5rem; margin-bottom: 1rem; }
+.dir-bio { font-family: var(--font-display); font-size: 1.1rem; font-weight: 300; color: var(--text-2); line-height: 1.8; max-width: 700px; }
+.dir-stats { display: flex; gap: 2.5rem; margin-top: 2rem; }
+.dir-stat-n { font-family: var(--font-mono); font-size: 1.6rem; font-weight: 500; color: var(--text); }
+.dir-stat-l { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-top: 2px; }
+.dir-body { max-width: 1440px; margin: 0 auto; padding: 3rem 2.5rem 6rem; }
+.dir-section-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; margin-bottom: 2rem; }
+.dir-section-title em { font-style: italic; color: var(--accent); }
+</style>
+</head>
+<body>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><div class="logo-mark"></div><span>IRISVUE</span></a>
+    <div class="nav-breadcrumb">
+      <a href="/directors">Directors</a>
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <span>{{ director.name }}</span>
+    </div>
+    <div class="nav-right">
+      <a href="/watchlist" class="btn-signin">Watchlist</a>
+      <a href="#" class="btn-join">Join free</a>
+    </div>
+  </div>
+</nav>
+
+<main class="dir-main">
+  <div class="dir-hero">
+    <div class="section-label">Director</div>
+    <h1 class="dir-name">{{ director.name }}</h1>
+    <div class="dir-meta">
+      {% if director.birthday %}<span>Born {{ director.birthday }}</span>{% endif %}
+      {% if director.place_of_birth %}<span>{{ director.place_of_birth }}</span>{% endif %}
+    </div>
+    {% if director.biography %}
+    <div class="dir-bio">{{ director.biography[:400] }}{% if director.biography|length > 400 %}...{% endif %}</div>
+    {% endif %}
+    <div class="dir-stats">
+      <div><div class="dir-stat-n">{{ films|length }}</div><div class="dir-stat-l">Films directed</div></div>
+      {% if director.known_for_department %}<div><div class="dir-stat-n">{{ director.known_for_department }}</div><div class="dir-stat-l">Known for</div></div>{% endif %}
+    </div>
+  </div>
+
+  <div class="dir-body">
+    <h2 class="dir-section-title">Complete <em>Filmography</em></h2>
+    <div class="film-grid">
+      {% for film in films %}
+      <a href="/movie/{{ film.id }}" class="film-card">
+        <div class="film-card-poster">
+          {% if film.poster_path %}
+          <img src="{{ poster(film.poster_path, 'w342') }}" alt="{{ film.title }}" loading="lazy">
+          {% else %}
+          <div class="film-card-empty">{{ film.title[0] }}</div>
+          {% endif %}
+          <div class="film-card-hover">
+            <div class="film-card-rating">{{ "%.1f"|format(film.vote_average) }}</div>
+            <div class="film-card-cta">View Film</div>
+          </div>
+        </div>
+        <div class="film-card-info">
+          <div class="film-card-title">{{ film.title }}</div>
+          <div class="film-card-year">{{ film.release_date[:4] if film.release_date else 'TBA' }}</div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-logo"><div class="logo-mark sm"></div><span>IRISVUE</span></div>
+      <div class="footer-tagline">Your cinematic view of the world</div>
+    </div>
+  </div>
+  <div class="footer-bottom">2026 Irisvue · Built by {{ owner.name }}</div>
+</footer>
+<script src="/static/js/main.js"></script>
+</body>
+</html>

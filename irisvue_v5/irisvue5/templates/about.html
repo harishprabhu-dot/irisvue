@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <meta name="description" content="Irisvue — Your cinematic view of the world. Discover films, camera specs, cast, crew and more.">
+    <meta name="keywords" content="film discovery, movie ratings, cinema, letterboxd alternative, irisvue, film platform">
+    <meta name="author" content="S.R. HarisH Prabhu">
+    <meta property="og:title" content="Irisvue — Your Cinematic View of the World">
+    <meta property="og:description" content="Discover films like never before. Camera specs, cast, crew, ratings and more.">
+    <meta property="og:url" content="https://irisvue.onrender.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Irisvue — Your Cinematic View">
+    <meta name="twitter:description" content="Discover films like never before.">
+    <meta name="robots" content="index, follow"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Irisvue</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+<style>
+.about-main { padding-top: var(--nav-h); min-height: 100vh; }
+.about-inner { max-width: 800px; margin: 0 auto; padding: 5rem 2.5rem 6rem; }
+.about-section { margin-bottom: 4rem; padding-bottom: 4rem; border-bottom: 1px solid var(--border); }
+.about-section:last-child { border-bottom: none; }
+.about-label { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 12px; }
+.about-label::before { content:''; display:block; width:24px; height:1px; background:var(--accent); }
+.about-heading { font-family: var(--font-display); font-size: 2.5rem; font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+.about-heading em { font-style: italic; color: var(--text-2); }
+.about-text { font-family: var(--font-display); font-size: 1.15rem; font-weight: 300; line-height: 1.9; color: var(--text-2); }
+.about-text p { margin-bottom: 1.25rem; }
+.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-top: 2rem; }
+.contact-item { background: var(--bg-2); padding: 1.5rem; }
+.contact-label { font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); margin-bottom: 8px; }
+.contact-val { font-size: 0.9rem; font-weight: 600; color: var(--text); line-height: 1.4; }
+.contact-val a { color: var(--accent); text-decoration: none; }
+.contact-val a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><div class="logo-mark"></div><span>IRISVUE</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Discover</a></li><li><a href="/search">Films</a></li>
+      <li><a href="/community">Community</a></li><li><a href="/battles">Battles</a></li>
+      <li><a href="/clubs">Clubs</a></li><li><a href="/dna">My DNA</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/watchlist" class="btn-signin">Watchlist</a>
+      <a href="#" class="btn-join">Join free</a>
+    </div>
+  </div>
+</nav>
+
+<main class="about-main">
+  <div class="about-inner">
+
+    <div class="about-section">
+      <div class="about-label">About Irisvue</div>
+      <h1 class="about-heading">Your cinematic<br><em>view of the world.</em></h1>
+      <div class="about-text">
+        <p>Irisvue is a film discovery and logging platform built for people who truly love cinema. It goes beyond simple ratings — giving you the full picture of every film, from the camera and lens used to shoot it, to the locations it was filmed in, the full cast and technical crew, and the most iconic cinematographic shots.</p>
+        <p>The name says it all. <strong style="color:var(--text)">Iris</strong> — the part of the camera and the human eye that controls how much light enters. <strong style="color:var(--text)">Vue</strong> — the French word for view. Together: your cinematic view of the world.</p>
+        <p>Built with the belief that every film deserves to be understood as deeply as it is felt.</p>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <div class="about-label">Creator</div>
+      <h2 class="about-heading">Built by <em>one person.</em></h2>
+      <div class="about-text">
+        <p>Irisvue was designed and built by <strong style="color:var(--text)">{{ owner.name }}</strong>, a film enthusiast and developer based in {{ owner.place }}.</p>
+        <p>This is a personal project born out of a love for cinema and a desire to build something that truly does justice to the art form.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <div class="contact-label">Name</div>
+          <div class="contact-val">{{ owner.name }}</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">Location</div>
+          <div class="contact-val">{{ owner.place }}</div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-label">Contact</div>
+          <div class="contact-val"><a href="mailto:{{ owner.email }}">{{ owner.email }}</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <div class="about-label">Data</div>
+      <h2 class="about-heading">Powered by <em>TMDB.</em></h2>
+      <div class="about-text">
+        <p>Film data, posters, cast information, and ratings are sourced from The Movie Database (TMDB). Irisvue uses the TMDB API but is not endorsed or certified by TMDB.</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-logo"><div class="logo-mark sm"></div><span>IRISVUE</span></div>
+      <div class="footer-tagline">Your cinematic view of the world</div>
+      <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-3);margin-top:6px;">Built by {{ owner.name }} · {{ owner.place }}</div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="footer-col-title">Platform</div>
+        <a href="/">Discover</a><a href="/search">Films</a>
+        <a href="/battles">Battles</a><a href="/clubs">Clubs</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Account</div>
+        <a href="/watchlist">Watchlist</a>
+        <a href="/dna">My DNA</a>
+        <a href="/community">Community</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Info</div>
+        <a href="/about">About</a>
+        <a href="mailto:{{ owner.email }}">Contact</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">2026 Irisvue · Built by {{ owner.name }} · {{ owner.email }} · {{ owner.place }} · Uses the TMDB API. Not endorsed by TMDB.</div>
+</footer>
+<script src="/static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <meta name="description" content="Irisvue — Your cinematic view of the world. Discover films, camera specs, cast, crew and more.">
+    <meta name="keywords" content="film discovery, movie ratings, cinema, letterboxd alternative, irisvue, film platform">
+    <meta name="author" content="S.R. HarisH Prabhu">
+    <meta property="og:title" content="Irisvue — Your Cinematic View of the World">
+    <meta property="og:description" content="Discover films like never before. Camera specs, cast, crew, ratings and more.">
+    <meta property="og:url" content="https://irisvue.onrender.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Irisvue — Your Cinematic View">
+    <meta name="twitter:description" content="Discover films like never before.">
+    <meta name="robots" content="index, follow"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watchlist — Irisvue</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+<style>
+.wl-main { padding-top: var(--nav-h); min-height: 100vh; }
+.wl-header { max-width: 1440px; margin: 0 auto; padding: 4rem 2.5rem 3rem; display: flex; align-items: flex-end; justify-content: space-between; }
+.wl-count { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-2); }
+.wl-count span { color: var(--accent); }
+.wl-grid { max-width: 1440px; margin: 0 auto; padding: 0 2.5rem 6rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1.5rem 1.2rem; }
+.wl-empty { max-width: 1440px; margin: 0 auto; padding: 0 2.5rem 6rem; }
+.wl-empty-box { border: 1px dashed var(--border-2); border-radius: 4px; padding: 5rem 3rem; text-align: center; }
+.wl-empty-title { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin-bottom: 0.75rem; }
+.wl-empty-desc { color: var(--text-2); font-size: 0.9rem; margin-bottom: 2rem; }
+.wl-remove { position: absolute; top: 8px; right: 8px; background: rgba(8,8,8,0.8); border: 1px solid var(--border-2); color: var(--text-2); width: 26px; height: 26px; border-radius: 2px; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: 0.75rem; z-index: 2; transition: all 0.2s; }
+.film-card:hover .wl-remove { display: flex; }
+.wl-remove:hover { background: rgba(220,50,50,0.7); color: #fff; border-color: transparent; }
+.wl-added { position: absolute; bottom: 8px; left: 8px; font-family: var(--font-mono); font-size: 0.6rem; color: rgba(240,237,230,0.5); background: rgba(8,8,8,0.7); padding: 2px 6px; border-radius: 2px; }
+</style>
+</head>
+<body>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><div class="logo-mark"></div><span>IRISVUE</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Discover</a></li><li><a href="/search">Films</a></li>
+      <li><a href="/community">Community</a></li><li><a href="/battles">Battles</a></li>
+      <li><a href="/clubs">Clubs</a></li><li><a href="/dna">My DNA</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/watchlist" class="btn-signin active" style="color:var(--text);border-color:var(--border-3);">Watchlist</a>
+      <a href="#" class="btn-join">Join free</a>
+    </div>
+  </div>
+</nav>
+
+<main class="wl-main">
+  <div class="wl-header">
+    <div>
+      <div class="section-label">Personal</div>
+      <h1 class="section-title">My <em>Watchlist</em></h1>
+    </div>
+    <div class="wl-count">
+      <span id="wl-count">0</span> films saved
+    </div>
+  </div>
+
+  <div id="wl-content"></div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left"><div class="footer-logo"><div class="logo-mark sm"></div><span>IRISVUE</span></div><div class="footer-tagline">Your cinematic view of the world</div></div>
+  </div>
+  <div class="footer-bottom">2026 Irisvue.</div>
+</footer>
+
+<script src="/static/js/main.js"></script>
+<script>
+function getWatchlist() { return JSON.parse(localStorage.getItem('irisvue_watchlist') || '[]'); }
+function saveWatchlist(wl) { localStorage.setItem('irisvue_watchlist', JSON.stringify(wl)); }
+
+function removeFilm(id) {
+  let wl = getWatchlist();
+  wl = wl.filter(m => m.id !== id);
+  saveWatchlist(wl);
+  render();
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function render() {
+  const wl = getWatchlist();
+  const container = document.getElementById('wl-content');
+  document.getElementById('wl-count').textContent = wl.length;
+
+  if (!wl.length) {
+    container.innerHTML = `
+      <div class="wl-empty">
+        <div class="wl-empty-box">
+          <div class="wl-empty-title">Nothing saved yet.</div>
+          <div class="wl-empty-desc">Browse films and click "Watchlist" to save them here. They'll persist in your browser.</div>
+          <a href="/search" class="btn-primary-lg">Browse Films</a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="wl-grid">
+      ${wl.map(m => `
+        <div class="film-card">
+          <div class="film-card-poster" style="position:relative;">
+            ${m.poster
+              ? `<img src="${m.poster}" alt="${m.title}" loading="lazy">`
+              : `<div class="film-card-empty">${m.title[0]}</div>`}
+            <div class="film-card-hover">
+              <a href="/movie/${m.id}" style="display:contents">
+                <div class="film-card-rating">${m.rating ? m.rating.toFixed(1) : ''}</div>
+                <div class="film-card-cta">View Film</div>
+              </a>
+            </div>
+            <button class="wl-remove" onclick="removeFilm(${m.id})" title="Remove">✕</button>
+            <div class="wl-added">Added ${formatDate(m.added)}</div>
+          </div>
+          <a href="/movie/${m.id}" style="text-decoration:none;color:inherit;">
+            <div class="film-card-title">${m.title}</div>
+            <div class="film-card-year">${m.year || ''}</div>
+          </a>
+        </div>`).join('')}
+    </div>`;
+}
+
+render();
+</script>
+</body>
+</html>

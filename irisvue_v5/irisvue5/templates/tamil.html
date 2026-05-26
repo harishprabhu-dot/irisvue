@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+<title>Tamil Cinema — Irisvue</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+<style>
+.tamil-main { padding-top: var(--nav-h); min-height: 100vh; }
+.tamil-hero { background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 5rem 2.5rem 4rem; position: relative; overflow: hidden; }
+.tamil-hero-inner { max-width: 1440px; margin: 0 auto; }
+.tamil-title { font-family: var(--font-display); font-size: clamp(3rem,7vw,6rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; margin-bottom: 1rem; }
+.tamil-title em { font-style: italic; color: var(--accent); }
+.tamil-sub { font-family: var(--font-display); font-size: 1.2rem; font-weight: 300; color: var(--text-2); max-width: 600px; line-height: 1.8; }
+.tamil-tabs { max-width: 1440px; margin: 0 auto; padding: 0 2.5rem; display: flex; gap: 0; border-bottom: 1px solid var(--border); overflow-x: auto; }
+.tamil-tab { padding: 1rem 1.5rem; font-family: var(--font-ui); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; color: var(--text-2); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; white-space: nowrap; text-decoration: none; }
+.tamil-tab:hover, .tamil-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+.tamil-body { max-width: 1440px; margin: 0 auto; padding: 3rem 2.5rem 6rem; }
+.era-title { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+.era-desc { color: var(--text-2); font-size: 0.9rem; margin-bottom: 2rem; }
+</style>
+</head>
+<body>
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo"><div class="logo-mark"></div><span>IRISVUE</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Discover</a></li><li><a href="/search">Films</a></li>
+      <li><a href="/directors">Directors</a></li>
+      <li><a href="/decades">Decades</a></li>
+      <li><a href="/tamil" class="active">Tamil</a></li>
+      <li><a href="/boxoffice">Box Office</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/watchlist" class="btn-signin">Watchlist</a>
+      <a href="#" class="btn-join">Join free</a>
+    </div>
+  </div>
+</nav>
+
+<main class="tamil-main">
+  <div class="tamil-hero">
+    <div class="tamil-hero-inner">
+      <div class="section-label">Tamil Cinema</div>
+      <h1 class="tamil-title">Kollywood.<br><em>Unfiltered.</em></h1>
+      <p class="tamil-sub">From the golden era of MGR and Sivaji to the modern giants of Rajinikanth, Kamal, and the new wave — Tamil cinema is a world unto itself.</p>
+    </div>
+  </div>
+
+  <div class="tamil-tabs">
+    <a href="/tamil" class="tamil-tab {% if not era %}active{% endif %}">All</a>
+    <a href="/tamil?era=modern" class="tamil-tab {% if era == 'modern' %}active{% endif %}">Modern Era</a>
+    <a href="/tamil?era=classic" class="tamil-tab {% if era == 'classic' %}active{% endif %}">Classics</a>
+    <a href="/tamil?era=rajini" class="tamil-tab {% if era == 'rajini' %}active{% endif %}">Rajinikanth</a>
+    <a href="/tamil?era=kamal" class="tamil-tab {% if era == 'kamal' %}active{% endif %}">Kamal Haasan</a>
+    <a href="/tamil?era=mani" class="tamil-tab {% if era == 'mani' %}active{% endif %}">Mani Ratnam</a>
+    <a href="/tamil?era=shankar" class="tamil-tab {% if era == 'shankar' %}active{% endif %}">Shankar</a>
+    <a href="/tamil?era=newwave" class="tamil-tab {% if era == 'newwave' %}active{% endif %}">New Wave</a>
+  </div>
+
+  <div class="tamil-body">
+    {% for section in sections %}
+    <div style="margin-bottom:4rem;">
+      <div class="era-title">{{ section.title }}</div>
+      <div class="era-desc">{{ section.desc }}</div>
+      <div class="film-grid">
+        {% for film in section.films %}
+        <a href="/movie/{{ film.id }}" class="film-card">
+          <div class="film-card-poster">
+            {% if film.poster_path %}
+            <img src="{{ poster(film.poster_path, 'w342') }}" alt="{{ film.title }}" loading="lazy">
+            {% else %}
+            <div class="film-card-empty">{{ film.title[0] }}</div>
+            {% endif %}
+            <div class="film-card-hover">
+              <div class="film-card-rating">{{ "%.1f"|format(film.vote_average) }}</div>
+              <div class="film-card-cta">View Film</div>
+            </div>
+          </div>
+          <div class="film-card-info">
+            <div class="film-card-title">{{ film.title }}</div>
+            <div class="film-card-year">{{ film.release_date[:4] if film.release_date else '' }}</div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-logo"><div class="logo-mark sm"></div><span>IRISVUE</span></div>
+      <div class="footer-tagline">Your cinematic view of the world</div>
+      <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-3);margin-top:6px;">Built by {{ owner.name }} · {{ owner.place }}</div>
+    </div>
+  </div>
+  <div class="footer-bottom">2026 Irisvue · Built by {{ owner.name }}</div>
+</footer>
+<script src="/static/js/main.js"></script>
+</body>
+</html>
